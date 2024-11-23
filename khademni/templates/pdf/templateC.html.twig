@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            margin: 1mm;
+        }
+        .header {
+            position: fixed;
+            top: 0mm;
+            right: 10mm;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            height: 2cm;
+            margin: 0cm 2cm 0cm;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20mm;
+            font-size: 18pt;
+            font-weight: bold;
+        }
+        .table-container {
+            width: 100%;
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: auto;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: red; /* Change header color to red */
+            color: white; /* Ensure text is readable */
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+<header>
+   
+    <div class="title" >
+     Comment List
+    </div>
+    </header>
+ <footer>
+        <div style="font-size: 15px;margin-left: 10px">
+            Adresse :  Technopole Ghazela Ariana</div>
+        <div style="font-size: 15px;margin-left: 10px">
+            Numéro : +216 55 596 226</div>
+        <div style="font-size: 15px;margin-left: 10px">
+            E-mail : Khadamni@esprit.tn</div>
+    </footer>
+    <div class="table-container">
+        <table>
+           <thead>
+      <tr>
+        <th>Id</th>
+        <th>Content</th>
+        <th>CreatedAt</th>
+        <th>Post</th>
+        <th>utilisateur ID</th>
+    
+      </tr>
+    </thead>
+    <tbody>
+      {% for comment in comments %}
+        <tr>
+          <td>{{ comment.id }}</td>
+          <td>{{ comment.content }}</td>
+          <td>{{ comment.createdAt ? comment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+          <td>{{ comment.post.id }}</td>
+          <td>{{ comment.utilisateur.id }}</td>
+          
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="6">no records found</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}Post index{% endblock %}
+
+{% block body %}
+<style>
+  /* Couleurs */
+  :root {
+    --noir: #000;
+    --rouge:#f48b52;
+    --gris: #3c893c;
+    --blanc: #fff;
+  }
+
+  /* Typographie */
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .table-container {
+    margin-left: 10px;
+    max-width: 100%; /* Ensures the container doesn't exceed the page width */
+    overflow-x: auto; 
+    margin-bottom: 200px;
+    margin-top: 10px;
+  }
+
+  /* Tableau */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+
+  th, td {
+    border: 1px solid var(--gris);
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: var(--rouge);
+    color: var(--blanc);
+    font-weight: bold;
+  }
+
+  /* Alternance de lignes */
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  /* Effet de survol */
+  tr:hover {
+    background-color: #ddd;
+  }
+
+  .btn-esprit {
+    background-color: var(--gris);
+    color: var(--blanc);
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-esprit1 {
+    background-color: var(--gris);
+    color: var(--blanc);
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+  .btn-esprit:hover {
+    background-color: darken(var(--gris), 10%);
+  }
+
+  .btn-esprit1:hover {
+    background-color: darken(var(--gris), 10%);
+  }
+</style>
+<a href="{{ path('app_likes_new') }}" class="btn-esprit1">Add like</a>
+
+
+ <div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Post ID</th>
+                <th>IdUser</th>
+                <th>IsLiked</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for like in likes %}
+            <tr>
+                <td>{{ like.id }}</td>
+                   <td>{{ like.post.id  }}</td>
+                <td>{{ like.utilisateur.id  }}</td>
+                <td>{{ like.isLiked }}</td>
+                <td>
+                    <a href="{{ path('app_likes_delete', {'id': like.id}) }}" class="btn-esprit">delete</a>
+                    <a href="{{ path('app_likes_edit', {'id': like.id}) }}" class="btn-esprit">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+     </table>
+    </div>
+
+{% endblock %}

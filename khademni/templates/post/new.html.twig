@@ -1,0 +1,21 @@
+
+
+{% block body %}
+ <style>     header.topbarr {
+            background-color: #BB0000 !important;
+        }
+        h1 {
+            text-align: center; /* Centrer le titre */
+            color: #f48b52; /* Rouge */
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+      
+    </style>
+  
+
+    {{ include('post/_form.html.twig') }}
+
+    <a href="{{ path('app_post_index') }}">back to list</a>
+{% endblock %}

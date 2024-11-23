@@ -1,0 +1,29 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}Edit Comments{% endblock %}
+
+{% block body %}
+
+
+
+
+ <style>
+        h1 {
+            text-align: center; /* Centrer le titre */
+            color: #ff8000; /* Rouge */
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+ 
+  
+  
+    <h1>Edit Comment</h1>
+
+    {{ include('comment/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_comment_index') }}">back to list</a>
+
+    {{ include('comment/_delete_form.html.twig') }}
+{% endblock %}

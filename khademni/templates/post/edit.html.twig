@@ -1,0 +1,28 @@
+
+
+{% block title %}Edit Posts{% endblock %}
+
+{% block body %}
+
+
+
+
+ <style>
+        h1 {
+            text-align: center; /* Centrer le titre */
+            color: #f48b52; /* Rouge */
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+ 
+  
+    <h1>Edit Post</h1>
+
+    {{ include('post/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_post_index') }}">back to list</a>
+
+    {{ include('post/_delete_form.html.twig') }}
+{% endblock %}

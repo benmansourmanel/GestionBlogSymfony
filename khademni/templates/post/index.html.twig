@@ -1,0 +1,207 @@
+{% extends 'index.html.twig' %}
+
+{% block title %}Post index{% endblock %}
+
+{% block body %}
+<style>
+  /* Couleurs */
+  :root {
+    --noir: #000;
+    --rouge:#f48b52;
+    --gris: #3c893c;
+    --blanc: #fff;
+  }
+
+  /* Typographie */
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .table-container {
+    margin-left: 10px;
+    max-width: 100%; /* Ensures the container doesn't exceed the page width */
+    overflow-x: auto; 
+    margin-bottom: 200px;
+    margin-top: 10px;
+  }
+
+  /* Tableau */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+
+  th, td {
+    border: 1px solid var(--gris);
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: var(--rouge);
+    color: var(--blanc);
+    font-weight: bold;
+  }
+
+  /* Alternance de lignes */
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  /* Effet de survol */
+  tr:hover {
+    background-color: #ddd;
+  }
+
+  .btn-esprit {
+    background-color: var(--gris);
+    color: var(--blanc);
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-esprit1 {
+    background-color: var(--gris);
+    color: var(--blanc);
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+  .btn-esprit:hover {
+    background-color: darken(var(--gris), 10%);
+  }
+
+  .btn-esprit1:hover {
+    background-color: darken(var(--gris), 10%);
+  }
+</style>
+
+<form class="form-inline bg-light p-3 rounded">
+    <div class="form-group">
+        <label for="moduleFilter" class="mr-2">Filter by Title:</label>
+        <select class="form-control" id="moduleFilter">
+            <option value="">All</option>
+            {% for post in posts %}
+                <option value="{{ post.title }}">{{ post.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="sortBy" class="mr-2">Sort by:</label>
+        <select class="form-control" id="sortBy">
+            <option value="1">Id</option>
+            <option value="2">Title</option>
+            <option value="5">CreatedAt</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search Post...">
+    </div>
+</form>
+<a href="{{ path('export_excel') }}" class="btn-esprit1">Export to Excel</a>
+<a href="{{ path('pdf_generate') }}" class="btn-esprit1">Download PDF</a>
+
+<a href="{{ path('app_post_new') }}" class="btn-esprit1">Add Post</a>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Image</th>
+                <th>CreatedAt</th>
+                <th>UpdateAt</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.content }}</td>
+                <td>
+                    {% if post.image %}
+                        <img src="{{ asset('uploads/' ~ post.image) }}" style="max-width: 100px; height: auto;">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ post.updateAt ? post.updateAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_post_delete', {'id': post.id}) }}" class="btn-esprit">Delete</a>
+                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="btn-esprit">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function sortTable() {
+        const sortBy = document.getElementById('sortBy').value;
+        const rows = Array.from(document.querySelectorAll('table tbody tr'));
+
+        rows.sort((a, b) => {
+            const aValue = a.querySelector(`td:nth-child(${sortBy})`).textContent.trim();
+            const bValue = b.querySelector(`td:nth-child(${sortBy})`).textContent.trim();
+            return aValue.localeCompare(bValue);
+        });
+
+        const tbody = document.querySelector('table tbody');
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+    document.getElementById('sortBy').addEventListener('change', sortTable);
+
+    function filterTable() {
+        const filter = document.getElementById('searchInput').value.toUpperCase();
+        const rows = document.querySelectorAll('table tbody tr');
+        rows.forEach(row => {
+            const isVisible = Array.from(row.querySelectorAll('td')).some(td => 
+                td.textContent.toUpperCase().includes(filter)
+            );
+            row.style.display = isVisible ? '' : 'none';
+        });
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', filterTable);
+
+    document.getElementById('moduleFilter').addEventListener('change', function() {
+        const moduleFilter = this.value;
+        const rows = document.querySelectorAll('table tbody tr');
+        rows.forEach(row => {
+            const title = row.querySelector('td:nth-child(2)').textContent.trim();
+            row.style.display = moduleFilter === '' || title === moduleFilter ? '' : 'none';
+        });
+    });
+</script>
+
+{% endblock %}
